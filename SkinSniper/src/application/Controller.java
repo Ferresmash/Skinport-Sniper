@@ -62,115 +62,146 @@ import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import skinportApp.APITest;
-import skinportApp.Skin2;
+import skinportApp.CalculatedSkin;
 import skinportApp.SkinHandler;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
-public class Controller implements Initializable{
+public class Controller implements Initializable {
 
 	@FXML
 	private ListView<String> myListView;
-	
+
 	@FXML
 	private Label myLabel;
-	
+
 	String currentFood;
-	
-	
-	//WebPanel
-	
-	@FXML
-	private WebView webView;
-	
-	private WebEngine engine;
-	
+
 	@FXML
 	private TextField maxLabel;
 	@FXML
 	private TextField minLabel;
 	@FXML
 	private TextField updatedAtField;
-	
+
 	@FXML
 	private Button priceEnter;
-	
+
 	private String currentHTML;
-	private String priceEmpireURL = "https://pricempire.com/item/cs2/skin/";
-	
+
+	// grid
+
+	@FXML
+	private Button twentyFour;
+	@FXML
+	private Button sevenDays;
+	@FXML
+	private Button thirtyDays;
+	@FXML
+	private Button ninetyDays;
+	@FXML
+	private Button current;
+
+	@FXML
+	private Button skinPortLinkButton;
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-			
-		SkinHandler skinHandler = new SkinHandler(APITest.callAPI("https://api.skinport.com/v1/sales/history"),APITest.callAPI("https://api.skinport.com/v1/items"));
+
+		SkinHandler skinHandler = new SkinHandler(APITest.callAPI("https://api.skinport.com/v1/sales/history"),
+				APITest.callAPI("https://api.skinport.com/v1/items"));
 		List<String> marketNamesList = new ArrayList<String>();
-		for (Skin2 skin : skinHandler.getListedSkins()) {
+		for (CalculatedSkin skin : skinHandler.getListedSkins()) {
 			marketNamesList.add(skin.getMarket_hash_name());
 		}
-		
-		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+
+		// Update the skinlist
+		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				System.out.println("Button is pressed");
-				for (Skin2 skin : skinHandler.getListedSkins()) {
-					skin.setSettings(Double.valueOf(minLabel.getText()), Double.valueOf(maxLabel.getText()), Integer.valueOf(updatedAtField.getText()));
-					
+				for (CalculatedSkin skin : skinHandler.getListedSkins()) {
+					skin.setSettings(Double.valueOf(minLabel.getText()), Double.valueOf(maxLabel.getText()),
+							Integer.valueOf(updatedAtField.getText()));
+
 				}
 				skinHandler.sortList();
 				List<String> newMarketNamesList = new ArrayList<String>();
-				for (Skin2 skin : skinHandler.getListedSkins()) {
+				for (CalculatedSkin skin : skinHandler.getListedSkins()) {
 					newMarketNamesList.add(skin.getMarket_hash_name());
 				}
 				myListView.getItems().clear();
 				myListView.getItems().addAll(newMarketNamesList);
 			}
 		};
-		
-		priceEnter.setOnAction(event);
 
-		myListView.getItems().addAll(marketNamesList);
-		
-		myListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-
+		EventHandler<ActionEvent> goListingWebsite = new EventHandler<ActionEvent>() {
 			@Override
-			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				
-				System.out.println("changed gets called");
-				
-				currentFood = myListView.getSelectionModel().getSelectedItem();
-				
-				myLabel.setText(currentFood);
-				
+			public void handle(ActionEvent e) {
+
 				int index = myListView.getSelectionModel().getSelectedIndex();
-				if(index != -1) {
+				if (index != -1) {
 					currentHTML = skinHandler.getListedSkins().get(index).getItem_page();
-					priceEmpireURL = "https://pricempire.com/item/cs2/skin/" + skinHandler.getListedSkins().get(index).getItem_page().substring(26);
-					loadPage();
+					skinHandler.getListedSkins().get(index).getItem_page().substring(26);
+
 				}
-				
-				
+
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-				    try {
-						Desktop.getDesktop().browse(new URI(currentHTML));
-					} catch (IOException e) {
+					try {
+						if(!currentHTML.equals("")) {
+							Desktop.getDesktop().browse(new URI(currentHTML));
+						}
+					} catch (IOException e1) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (URISyntaxException e) {
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						e1.printStackTrace();
 					}
 				}
-				
-			}	
+			}
+		};
+
+		priceEnter.setOnAction(event);
+		skinPortLinkButton.setOnAction(goListingWebsite);
+
+		myListView.getItems().addAll(marketNamesList);
+
+		
+		//For selecting an item. Get ItemColorCode and change the grids text.
+		myListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+		        int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+		        
+		        // Ensure the selected index is valid
+		        if (selectedIndex >= 0) {
+		            currentFood = myListView.getSelectionModel().getSelectedItem();
+		            myLabel.setText(currentFood);
+		            CalculatedSkin skin = skinHandler.getListedSkins().get(selectedIndex);		            
+		            String colorCode = skin.getColorCode();
+
+		            // Update background color based on the color code
+		            updateBackgroundColor(twentyFour, colorCode.charAt(0));
+		            updateBackgroundColor(sevenDays, colorCode.charAt(1));
+		            updateBackgroundColor(thirtyDays, colorCode.charAt(2));
+		            updateBackgroundColor(ninetyDays, colorCode.charAt(3));
+		        }
+		    }
+
+		    // Helper method to update the background color based on the code
+		    private void updateBackgroundColor(Button button, char code) {
+		        String color = switch (code) {
+		            case 'G' -> "#00802b"; // Green
+		            case 'Y' -> "#ffcc00"; // Yellow
+		            case 'R' -> "#ff0000"; // Red
+		            default -> "#666666";  // Default gray
+		        };
+		        button.setStyle("-fx-background-color: " + color + ";");
+		    }
 		});
-		
-		currentHTML = "https://pricempire.com/item/cs2/skin/bayonet-doppler";
-		
-		engine = webView.getEngine();
-		loadPage();
-		
+
+		currentHTML = "";
 	}
-	public void loadPage(){
-		engine.load(priceEmpireURL);
-	}
-	
+
 }
