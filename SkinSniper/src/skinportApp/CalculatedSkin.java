@@ -19,11 +19,11 @@ public class CalculatedSkin {
 
 	private Skin corresponding;
 
-	// new point system (array with price, earn, percent! can be null)
-	private Double[] points24Hours = new Double[3];
-	private Double[] points7Days = new Double[3];
-	private Double[] points30Days = new Double[3];
-	private Double[] points90Days = new Double[3];
+	// new point system (array with price, earn, percent and volume! can be null)
+	private Double[] points24Hours = new Double[4];
+	private Double[] points7Days = new Double[4];
+	private Double[] points30Days = new Double[4];
+	private Double[] points90Days = new Double[4];
 
 	/**
 	 * Sets points for the skin
@@ -40,25 +40,33 @@ public class CalculatedSkin {
 			points24Hours[0] = corresponding.getLast_24_hours().getMin();
 			points24Hours[1] = points24Hours[0] - min_price;
 			points24Hours[2] = points24Hours[1] / min_price;
+			
 		}
+		points24Hours[3] = (double) corresponding.getLast_24_hours().getVolume();
 
 		if (corresponding.getLast_7_days().getMin() != null) {
 			points7Days[0] = corresponding.getLast_7_days().getMin();
 			points7Days[1] = points7Days[0] - min_price;
 			points7Days[2] = points7Days[1] / min_price;
+			
 		}
+		points7Days[3] = (double) corresponding.getLast_7_days().getVolume();
 
 		if (corresponding.getLast_30_days().getMin() != null) {
 			points30Days[0] = corresponding.getLast_30_days().getMin();
 			points30Days[1] = points30Days[0] - min_price;
 			points30Days[2] = points30Days[1] / min_price;
+			
 		}
+		points30Days[3] = (double) corresponding.getLast_30_days().getVolume();
 
 		if (corresponding.getLast_90_days().getMin() != null) {
 			points90Days[0] = corresponding.getLast_90_days().getMin();
 			points90Days[1] = points90Days[0] - min_price;
 			points90Days[2] = points90Days[1] / min_price;
+			
 		}
+		points90Days[3] = (double) corresponding.getLast_90_days().getVolume();
 	}
 
 
@@ -217,15 +225,15 @@ public class CalculatedSkin {
 		this.created_at = created_at;
 	}
 
-	public Double getPoints(Double sortBy) {
-		if(sortBy.equals(90.0)) {
-			return points90Days[2];
-		}else if(sortBy.equals(30.0)) {
-			return points30Days[2];
-		}else if(sortBy.equals(7.0)) {
-			return points7Days[2];
+	public Double[] getPoints(int sortBy) {
+		if(sortBy == 90) {
+			return points90Days;
+		}else if(sortBy == 30) {
+			return points30Days;
+		}else if(sortBy == 7) {
+			return points7Days;
 		}else {
-			return points24Hours[2];
+			return points24Hours;
 		}
 	}
 

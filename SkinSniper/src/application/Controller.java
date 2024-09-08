@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import skinportApp.APITest;
 import skinportApp.CalculatedSkin;
@@ -41,6 +42,12 @@ public class Controller implements Initializable {
 	@FXML
 	private TextField updatedAtField;
 
+	@FXML
+	private TextField volumeField;
+	
+	@FXML
+	private RadioButton unrelRadButt;
+	
 	@FXML
 	private Button priceEnter;
 
@@ -91,6 +98,9 @@ public class Controller implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
+
+		
 
 		SkinHandler skinHandler = new SkinHandler(APITest.callAPI("https://api.skinport.com/v1/sales/history"),
 				APITest.callAPI("https://api.skinport.com/v1/items"));
@@ -99,6 +109,7 @@ public class Controller implements Initializable {
 			marketNamesList.add(skin.getMarket_hash_name());
 		}
 		
+		unrelRadButt.setSelected(true);
 		myListView.getItems().addAll(marketNamesList);
 
 		// Update the skinlist
@@ -107,7 +118,7 @@ public class Controller implements Initializable {
 			public void handle(ActionEvent e) {
 
 				skinHandler.setSettings(Double.valueOf(minLabel.getText()), Double.valueOf(maxLabel.getText()),
-						Integer.valueOf(updatedAtField.getText()));
+						Integer.valueOf(updatedAtField.getText()),Integer.valueOf(volumeField.getText()),unrelRadButt.isSelected());
 				skinHandler.filterList();
 				List<String> newMarketNamesList = new ArrayList<String>();
 				if (skinHandler.getFilteredSkins().size() != 0) {

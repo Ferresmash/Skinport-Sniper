@@ -17,9 +17,12 @@ public class SkinHandler {
 
 	// Settings:
 	private Double sortPriceMin = 50.0;
-	private Double sortPriceMax = 400.0;
+	private Double sortPriceMax = 300.0;
 	// 24, 7, 30, 90
-	private int sortByDays = 24;
+	private int sortByDays = 7;
+	private int volume = 5;
+	private boolean hideUnreliableSkins = true;
+	
 
 	public SkinHandler(String skinHistory, String currentSkin) {
 
@@ -58,11 +61,23 @@ public class SkinHandler {
 		for (CalculatedSkin calculatedSkin : listedSkins) {
 			if (calculatedSkin.getMin_price() != null) {
 				if (calculatedSkin.getMin_price() >= sortPriceMin && calculatedSkin.getMin_price() <= sortPriceMax) {
-					filteredSkins.add(calculatedSkin);
+					if(!isUnreliable(calculatedSkin) && volume <= calculatedSkin.getPoints(sortByDays)[3]) {
+						filteredSkins.add(calculatedSkin);
+					}
 				}
 			}
 		}
 		sortList(sortByDays);
+	}
+	
+	public boolean isUnreliable(CalculatedSkin skin) {
+		if(!hideUnreliableSkins) {
+			return false;
+		}
+		if(skin.getMarket_hash_name().contains("Case Hardened")||skin.getMarket_hash_name().contains("Doppler")||skin.getMarket_hash_name().contains("Music Kit")) {
+			return true;
+		}
+		return false;
 	}
 
 	public List<CalculatedSkin> getListedSkins() {
@@ -78,10 +93,12 @@ public class SkinHandler {
 	}
 	
 	
-	public void setSettings(Double min, Double max, int days) {
+	public void setSettings(Double min, Double max, int days, int volume, boolean hideUnreliableSkins) {
 		sortPriceMin = min;
 		sortPriceMax = max;
 		sortByDays = days;
+		this.volume = volume;
+		this.hideUnreliableSkins = hideUnreliableSkins;
 	}
 	
 	
