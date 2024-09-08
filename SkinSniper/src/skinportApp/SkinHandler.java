@@ -2,8 +2,6 @@ package skinportApp;
 
 import java.util.ArrayList;
 
-
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +13,13 @@ public class SkinHandler {
 
 	private List<Skin> skinList = new ArrayList<>();
 	private List<CalculatedSkin> listedSkins = new ArrayList<>();
+	private List<CalculatedSkin> filteredSkins = new ArrayList<>();
+
+	// Settings:
+	private Double sortPriceMin = 50.0;
+	private Double sortPriceMax = 400.0;
+	// 24, 7, 30, 90
+	private int sortByDays = 24;
 
 	public SkinHandler(String skinHistory, String currentSkin) {
 
@@ -33,18 +38,52 @@ public class SkinHandler {
 				}
 			}
 		}
-		Collections.sort(this.listedSkins, Comparator.comparingDouble(CalculatedSkin::getPoints).reversed());
+		filterList();
 	}
 	
-	public void sortList() {
-		Collections.sort(this.listedSkins, Comparator.comparingDouble(CalculatedSkin::getPoints).reversed());
+	public void sortList(int sortByDays) {
+		if(sortByDays == 90) {
+			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints90Days).reversed());
+		}else if(sortByDays == 30) {
+			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints30Days).reversed());
+		}else if(sortByDays == 7) {
+			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints7Days).reversed());
+		}else {
+			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints24Hours).reversed());
+		}
 	}
-	
-	public List<CalculatedSkin> getListedSkins(){
+
+	public void filterList() {
+		filteredSkins = new ArrayList<>();
+		for (CalculatedSkin calculatedSkin : listedSkins) {
+			if (calculatedSkin.getMin_price() != null) {
+				if (calculatedSkin.getMin_price() >= sortPriceMin && calculatedSkin.getMin_price() <= sortPriceMax) {
+					filteredSkins.add(calculatedSkin);
+				}
+			}
+		}
+		sortList(sortByDays);
+	}
+
+	public List<CalculatedSkin> getListedSkins() {
 		return this.listedSkins;
+	}
+	
+	public List<CalculatedSkin> getFilteredSkins() {
+		return this.filteredSkins;
 	}
 
 	public List<Skin> getSkinList() {
 		return skinList;
 	}
+	
+	
+	public void setSettings(Double min, Double max, int days) {
+		sortPriceMin = min;
+		sortPriceMax = max;
+		sortByDays = days;
+	}
+	
+	
+	
 }

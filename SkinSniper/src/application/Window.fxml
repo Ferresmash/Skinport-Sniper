@@ -27,8 +27,8 @@
          <font>
             <Font name="System Bold" size="18.0" />
          </font></Label>
-      <TextField fx:id="maxLabel" layoutX="20.0" layoutY="227.0" prefHeight="25.0" prefWidth="140.0" promptText="50" />
-      <TextField fx:id="minLabel" layoutX="20.0" layoutY="269.0" prefHeight="25.0" prefWidth="140.0" promptText="400" />
+      <TextField fx:id="maxLabel" layoutX="20.0" layoutY="227.0" prefHeight="25.0" prefWidth="140.0" promptText="400" />
+      <TextField fx:id="minLabel" layoutX="20.0" layoutY="269.0" prefHeight="25.0" prefWidth="140.0" promptText="50" />
       <TextField fx:id="updatedAtField" layoutX="20.0" layoutY="311.0" prefHeight="25.0" prefWidth="140.0" promptText="24" />
       <Label layoutX="20.0" layoutY="210.0" prefHeight="17.0" prefWidth="149.0" text="max" textFill="WHITE" />
       <Label layoutX="20.0" layoutY="252.0" prefHeight="17.0" prefWidth="149.0" text="min" textFill="WHITE" />
@@ -48,19 +48,19 @@
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER" prefHeight="107.0" prefWidth="128.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" prefHeight="83.0" prefWidth="142.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="200.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="146.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="203.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Label alignment="CENTER" prefHeight="83.0" prefWidth="159.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="sevDaysPrice" alignment="CENTER" prefHeight="107.0" prefWidth="128.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="sevDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label fx:id="sevDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label fx:id="ninetyDaysPrice" alignment="CENTER" prefHeight="83.0" prefWidth="142.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="ninetyDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="ninetyDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Label fx:id="twntyFrHourPrice" alignment="CENTER" prefHeight="84.0" prefWidth="200.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" />
+            <Label fx:id="twntyFrHourEarn" alignment="CENTER" prefHeight="84.0" prefWidth="146.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" />
+            <Label fx:id="twntyFrHourPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" />
+            <Label fx:id="thirtyDaysPrice" alignment="CENTER" prefHeight="84.0" prefWidth="203.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="thirtyDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label fx:id="thirtyDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label fx:id="currPrice" alignment="CENTER" prefHeight="83.0" prefWidth="159.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <Button fx:id="twentyFour" alignment="CENTER" mnemonicParsing="false" prefHeight="124.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 0;" text="24h" textAlignment="CENTER" />

@@ -1,49 +1,8 @@
-//package application;
-//
-//import java.net.URL;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.ResourceBundle;
-//
-//import javafx.fxml.FXML;
-//import javafx.fxml.Initializable;
-//import javafx.scene.control.Label;
-//import javafx.scene.control.ListView;
-//import skinportApp.APITest;
-//import skinportApp.Skin2;
-//import skinportApp.SkinHandler;
-//
-//public class Controller implements Initializable{
-//
-//	@FXML
-//	private ListView<String> skinList;
-//	
-//	@FXML
-//	private Label marketName;
-//	
-//	private String[] randomArray = {"Hi","JI"};
-//
-//	@Override
-//	public void initialize(URL arg0, ResourceBundle arg1) {
-//		
-////		SkinHandler skinHandler = new SkinHandler(APITest.callAPI("https://api.skinport.com/v1/sales/history"),APITest.callAPI("https://api.skinport.com/v1/items"));
-////		
-////		List<String> marketNameList = new ArrayList<String>();
-////		
-////		for(Skin2 skin : skinHandler.getListedSkins()) {
-////			marketNameList.add(skin.getMarket_hash_name());
-////		}
-//		
-//		skinList.getItems().addAll(randomArray);
-//		
-//	}
-//	
-//
-//	
-//}
+
 package application;
 
 import java.awt.Desktop;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -59,8 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import skinportApp.APITest;
 import skinportApp.CalculatedSkin;
 import skinportApp.SkinHandler;
@@ -75,7 +32,7 @@ public class Controller implements Initializable {
 	@FXML
 	private Label myLabel;
 
-	String currentFood;
+	String skin;
 
 	@FXML
 	private TextField maxLabel;
@@ -105,30 +62,58 @@ public class Controller implements Initializable {
 	@FXML
 	private Button skinPortLinkButton;
 
+	@FXML
+	private Label twntyFrHourPrice;
+	@FXML
+	private Label twntyFrHourEarn;
+	@FXML
+	private Label twntyFrHourPercent;
+	@FXML
+	private Label sevDaysPrice;
+	@FXML
+	private Label sevDaysEarn;
+	@FXML
+	private Label sevDaysPercent;
+	@FXML
+	private Label thirtyDaysPrice;
+	@FXML
+	private Label thirtyDaysEarn;
+	@FXML
+	private Label thirtyDaysPercent;
+	@FXML
+	private Label ninetyDaysPrice;
+	@FXML
+	private Label ninetyDaysEarn;
+	@FXML
+	private Label ninetyDaysPercent;
+	@FXML
+	private Label currPrice;
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		SkinHandler skinHandler = new SkinHandler(APITest.callAPI("https://api.skinport.com/v1/sales/history"),
 				APITest.callAPI("https://api.skinport.com/v1/items"));
 		List<String> marketNamesList = new ArrayList<String>();
-		for (CalculatedSkin skin : skinHandler.getListedSkins()) {
+		for (CalculatedSkin skin : skinHandler.getFilteredSkins()) {
 			marketNamesList.add(skin.getMarket_hash_name());
 		}
+		
+		myListView.getItems().addAll(marketNamesList);
 
 		// Update the skinlist
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				System.out.println("Button is pressed");
-				for (CalculatedSkin skin : skinHandler.getListedSkins()) {
-					skin.setSettings(Double.valueOf(minLabel.getText()), Double.valueOf(maxLabel.getText()),
-							Integer.valueOf(updatedAtField.getText()));
 
-				}
-				skinHandler.sortList();
+				skinHandler.setSettings(Double.valueOf(minLabel.getText()), Double.valueOf(maxLabel.getText()),
+						Integer.valueOf(updatedAtField.getText()));
+				skinHandler.filterList();
 				List<String> newMarketNamesList = new ArrayList<String>();
-				for (CalculatedSkin skin : skinHandler.getListedSkins()) {
-					newMarketNamesList.add(skin.getMarket_hash_name());
+				if (skinHandler.getFilteredSkins().size() != 0) {
+					for (CalculatedSkin skin : skinHandler.getFilteredSkins()) {
+						newMarketNamesList.add(skin.getMarket_hash_name());
+					}
 				}
 				myListView.getItems().clear();
 				myListView.getItems().addAll(newMarketNamesList);
@@ -141,21 +126,19 @@ public class Controller implements Initializable {
 
 				int index = myListView.getSelectionModel().getSelectedIndex();
 				if (index != -1) {
-					currentHTML = skinHandler.getListedSkins().get(index).getItem_page();
-					skinHandler.getListedSkins().get(index).getItem_page().substring(26);
+					currentHTML = skinHandler.getFilteredSkins().get(index).getItem_page();
+					skinHandler.getFilteredSkins().get(index).getItem_page().substring(26);
 
 				}
 
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 					try {
-						if(!currentHTML.equals("")) {
+						if (!currentHTML.equals("")) {
 							Desktop.getDesktop().browse(new URI(currentHTML));
 						}
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (URISyntaxException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -165,40 +148,90 @@ public class Controller implements Initializable {
 		priceEnter.setOnAction(event);
 		skinPortLinkButton.setOnAction(goListingWebsite);
 
-		myListView.getItems().addAll(marketNamesList);
 
-		
-		//For selecting an item. Get ItemColorCode and change the grids text.
+
+		// For selecting an item. Get ItemColorCode and change the grids text.
 		myListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-		        int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
-		        
-		        // Ensure the selected index is valid
-		        if (selectedIndex >= 0) {
-		            currentFood = myListView.getSelectionModel().getSelectedItem();
-		            myLabel.setText(currentFood);
-		            CalculatedSkin skin = skinHandler.getListedSkins().get(selectedIndex);		            
-		            String colorCode = skin.getColorCode();
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+				// Ensure the selected index is valid
+				if (selectedIndex >= 0) {
+					skin = myListView.getSelectionModel().getSelectedItem();
+					myLabel.setText(skin);
+					CalculatedSkin skin = skinHandler.getFilteredSkins().get(selectedIndex);
+					String colorCode = skin.getColorCode();
 
-		            // Update background color based on the color code
-		            updateBackgroundColor(twentyFour, colorCode.charAt(0));
-		            updateBackgroundColor(sevenDays, colorCode.charAt(1));
-		            updateBackgroundColor(thirtyDays, colorCode.charAt(2));
-		            updateBackgroundColor(ninetyDays, colorCode.charAt(3));
-		        }
-		    }
+					// Update background color based on the color code
+					updateBackgroundColor(twentyFour, colorCode.charAt(0));
+					updateBackgroundColor(sevenDays, colorCode.charAt(1));
+					updateBackgroundColor(thirtyDays, colorCode.charAt(2));
+					updateBackgroundColor(ninetyDays, colorCode.charAt(3));
+					
+					if (skin.getPrice24Hours() != null) {
+						double skin24HourPrice = skin.getPrice24Hours();
+						twntyFrHourPrice.setText(Double.toString(skin24HourPrice));
+						twntyFrHourEarn.setText(Double.toString(skin24HourPrice - skin.getMin_price()));
+						twntyFrHourPercent.setText(
+								Double.toString((skin24HourPrice - skin.getMin_price()) / skin.getMin_price()));
+					} else {
+						twntyFrHourPrice.setText("-");
+						twntyFrHourEarn.setText("-");
+						twntyFrHourPercent.setText("-");
+					}
 
-		    // Helper method to update the background color based on the code
-		    private void updateBackgroundColor(Button button, char code) {
-		        String color = switch (code) {
-		            case 'G' -> "#00802b"; // Green
-		            case 'Y' -> "#ffcc00"; // Yellow
-		            case 'R' -> "#ff0000"; // Red
-		            default -> "#666666";  // Default gray
-		        };
-		        button.setStyle("-fx-background-color: " + color + ";");
-		    }
+					if (skin.getPrice7Days() != null) {
+						double skin7DaysPrice = skin.getPrice7Days();
+						sevDaysPrice.setText(Double.toString(skin7DaysPrice));
+						sevDaysEarn.setText(Double.toString(skin7DaysPrice - skin.getMin_price()));
+						sevDaysPercent
+								.setText(Double.toString((skin7DaysPrice - skin.getMin_price()) / skin.getMin_price()));
+					} else {
+						sevDaysPrice.setText("-");
+						sevDaysEarn.setText("-");
+						sevDaysPercent.setText("-");
+					}
+
+					if (skin.getPrice30Days() != null) {
+						double skin30DaysPrice = skin.getPrice30Days();
+						thirtyDaysPrice.setText(Double.toString(skin30DaysPrice));
+						thirtyDaysEarn.setText(Double.toString(skin30DaysPrice - skin.getMin_price()));
+						thirtyDaysPercent.setText(
+								Double.toString((skin30DaysPrice - skin.getMin_price()) / skin.getMin_price()));
+					} else {
+						thirtyDaysPrice.setText("-");
+						thirtyDaysEarn.setText("-");
+						thirtyDaysPercent.setText("-");
+					}
+
+					if (skin.getPrice90Days() != null) {
+						double skin90DaysPrice = skin.getPrice90Days();
+						ninetyDaysPrice.setText(Double.toString(skin90DaysPrice));
+						ninetyDaysEarn.setText(Double.toString(skin90DaysPrice - skin.getMin_price()));
+						ninetyDaysPercent.setText(
+								Double.toString((skin90DaysPrice - skin.getMin_price()) / skin.getMin_price()));
+					} else {
+						ninetyDaysPrice.setText("-");
+						ninetyDaysEarn.setText("-");
+						ninetyDaysPercent.setText("-");
+					}
+					if (skin.getMin_price() != null) {
+						currPrice.setText("" + skin.getMin_price());
+					} else {
+						currPrice.setText("-");
+					}
+				}
+			}
+
+			private void updateBackgroundColor(Button button, char code) {
+				String color = switch (code) {
+				case 'G' -> "#00802b"; // Green
+				case 'Y' -> "#ffcc00"; // Yellow
+				case 'R' -> "#ff0000"; // Red
+				default -> "#666666"; // Default gray
+				};
+				button.setStyle("-fx-background-color: " + color + ";");
+			}
 		});
 
 		currentHTML = "";

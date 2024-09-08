@@ -14,68 +14,54 @@ public class CalculatedSkin {
 	private int quantity;
 	private long created_at;
 	private long updated_at;
-	private double points;
 
 	private String colorCode;
 
 	private Skin corresponding;
 
-	// Settings:
-	private Double sortPriceMin = 50.0;
-	private Double sortPriceMax = 400.0;
-	// 24, 7, 30, 90
-	private int sortByDays = 24;
+	// new point system (array with price, earn, percent! can be null)
+	private Double[] points24Hours = new Double[3];
+	private Double[] points7Days = new Double[3];
+	private Double[] points30Days = new Double[3];
+	private Double[] points90Days = new Double[3];
 
 	/**
 	 * Sets points for the skin
 	 */
 	public void setPoints(Skin corresponding) {
-		PriceData pD = corresponding.getLast_24_hours();
+//		PriceData pD = corresponding.getLast_24_hours();
 		this.corresponding = corresponding;
-		if (sortByDays == 24) {
-			pD = corresponding.getLast_24_hours();
-		}
-		if (sortByDays == 7) {
-			pD = corresponding.getLast_7_days();
-		}
-		if (sortByDays == 30) {
-			pD = corresponding.getLast_30_days();
-		}
-		if (sortByDays == 90) {
-			pD = corresponding.getLast_90_days();
-		}
-
-		if (pD.getVolume() < 2 || min_price == null || min_price == 0) {
-			this.points = -100000;
+		
+		if(min_price == null) {
 			return;
 		}
-		if (sortPriceMin > min_price || min_price > sortPriceMax) {
-			points = -10000;
-			return;
+		
+		if (corresponding.getLast_24_hours().getMin() != null) {
+			points24Hours[0] = corresponding.getLast_24_hours().getMin();
+			points24Hours[1] = points24Hours[0] - min_price;
+			points24Hours[2] = points24Hours[1] / min_price;
 		}
 
-		if (corresponding.getMarket_hash_name().contains("Case Hardened")
-				|| corresponding.getMarket_hash_name().contains("Doppler")
-				|| corresponding.getMarket_hash_name().contains("Fade")
-				|| corresponding.getMarket_hash_name().contains("Music Kit")) {
-			points = -10000;
-			return;
+		if (corresponding.getLast_7_days().getMin() != null) {
+			points7Days[0] = corresponding.getLast_7_days().getMin();
+			points7Days[1] = points7Days[0] - min_price;
+			points7Days[2] = points7Days[1] / min_price;
 		}
 
-		// counts how much we earn if we buy and sell for lowest price on market, 0.88
-		// is tax on skinport
-		points = (pD.getMin() * 0.88 - min_price) / min_price;
+		if (corresponding.getLast_30_days().getMin() != null) {
+			points30Days[0] = corresponding.getLast_30_days().getMin();
+			points30Days[1] = points30Days[0] - min_price;
+			points30Days[2] = points30Days[1] / min_price;
+		}
+
+		if (corresponding.getLast_90_days().getMin() != null) {
+			points90Days[0] = corresponding.getLast_90_days().getMin();
+			points90Days[1] = points90Days[0] - min_price;
+			points90Days[2] = points90Days[1] / min_price;
+		}
 	}
 
-	public void setSettings(Double sortPriceMin, Double sortPriceMax, int sortByDays) {
-		this.sortPriceMin = (sortPriceMin == null) ? this.sortPriceMin : sortPriceMin;
-		this.sortPriceMax = (sortPriceMax == null) ? this.sortPriceMax : sortPriceMax;
-		this.sortByDays = (sortByDays == 0) ? this.sortByDays : sortByDays;
-		if (!(corresponding == null)) {
-			setPoints(corresponding);
-		}
 
-	}
 	/**
 	 * Sets colors for the skin
 	 */
@@ -85,51 +71,51 @@ public class CalculatedSkin {
 		if (colorCode == null || colorCode.length() != 4) {
 			colorCode = "NNNN";
 		}
-		
-		if(min_price == null) {
+
+		if (min_price == null) {
 			return;
 		}
 
 		// 24 hours comparison
-		if (corresponding.getLast_24_hours().getMin() != null) {
-			if (min_price.equals(corresponding.getLast_24_hours().getMin())) {
+		if (points24Hours[0] != null) {
+			if (0 < points24Hours[2] && points24Hours[2] < 0.1) {
 				colorCode = "Y" + colorCode.substring(1);
-			} else if (min_price < corresponding.getLast_24_hours().getMin()) {
+			} else if (points24Hours[2] >= 0.1) {
 				colorCode = "G" + colorCode.substring(1);
-			} else if (min_price > corresponding.getLast_24_hours().getMin()) {
+			} else if (points24Hours[2] <= 0.0) {
 				colorCode = "R" + colorCode.substring(1);
 			}
 		}
 
 		// 7 days comparison
-		if (corresponding.getLast_7_days().getMin() != null) {
-			if (min_price == corresponding.getLast_7_days().getMin()) {
+		if (points7Days[0] != null) {
+			if (0 < points7Days[2] && points7Days[2] < 0.1) {
 				colorCode = colorCode.substring(0, 1) + "Y" + colorCode.substring(2);
-			} else if (min_price < corresponding.getLast_7_days().getMin()) {
+			} else if (points7Days[2] >= 0.1) {
 				colorCode = colorCode.substring(0, 1) + "G" + colorCode.substring(2);
-			} else if (min_price > corresponding.getLast_7_days().getMin()) {
+			} else if (points7Days[2] <= 0.0) {
 				colorCode = colorCode.substring(0, 1) + "R" + colorCode.substring(2);
 			}
 		}
 
 		// 30 days comparison
-		if (corresponding.getLast_30_days().getMin() != null) {
-			if (min_price == corresponding.getLast_30_days().getMin()) {
+		if (points30Days[0] != null) {
+			if (0 < points30Days[2] && points30Days[2] < 0.1) {
 				colorCode = colorCode.substring(0, 2) + "Y" + colorCode.substring(3);
-			} else if (min_price < corresponding.getLast_30_days().getMin()) {
+			} else if (points30Days[2] >= 0.1) {
 				colorCode = colorCode.substring(0, 2) + "G" + colorCode.substring(3);
-			} else if (min_price > corresponding.getLast_30_days().getMin()) {
+			} else if (points30Days[2] <= 0.0) {
 				colorCode = colorCode.substring(0, 2) + "R" + colorCode.substring(3);
 			}
 		}
 
 		// 90 days comparison
-		if (corresponding.getLast_90_days().getMin() != null) {
-			if (min_price == corresponding.getLast_90_days().getMin()) {
+		if (points90Days[0] != null) {
+			if (0 < points90Days[2] && points90Days[2] < 0.1) {
 				colorCode = colorCode.substring(0, 3) + "Y";
-			} else if (min_price < corresponding.getLast_90_days().getMin()) {
+			} else if (points90Days[2] >= 0.1) {
 				colorCode = colorCode.substring(0, 3) + "G";
-			} else if (min_price > corresponding.getLast_90_days().getMin()) {
+			} else if (points90Days[2] <= 0.0) {
 				colorCode = colorCode.substring(0, 3) + "R";
 			}
 		}
@@ -231,16 +217,55 @@ public class CalculatedSkin {
 		this.created_at = created_at;
 	}
 
-	public double getPoints() {
-		return points;
-	}
-
-	public void setPoints(double points) {
-		this.points = points;
+	public Double getPoints(Double sortBy) {
+		if(sortBy.equals(90.0)) {
+			return points90Days[2];
+		}else if(sortBy.equals(30.0)) {
+			return points30Days[2];
+		}else if(sortBy.equals(7.0)) {
+			return points7Days[2];
+		}else {
+			return points24Hours[2];
+		}
 	}
 
 	public String getColorCode() {
 		return colorCode;
+	}
+
+	public Skin getCorresponding() {
+		return corresponding;
+	}
+	
+	//Can mess with the evaluation due to setting the value to zero. But it is needed for sorting the list
+
+	public Double getPoints24Hours() {
+		return (points24Hours[2] != null)? points24Hours[2] : 0.0;
+	}
+
+	public Double getPoints7Days() {
+		return (points7Days[2] != null)? points7Days[2] : 0.0;
+	}
+
+	public Double getPoints30Days() {
+		return (points30Days[2] != null)? points30Days[2] : 0.0;
+	}
+
+	public Double getPoints90Days() {
+		return (points90Days[2] != null)? points90Days[2] : 0.0;
+	}
+	
+	public Double getPrice24Hours() {
+		return points24Hours[0];
+	}
+	public Double getPrice7Days() {
+		return points7Days[0];
+	}
+	public Double getPrice30Days() {
+		return points30Days[0];
+	}
+	public Double getPrice90Days() {
+		return points90Days[0];
 	}
 
 }
