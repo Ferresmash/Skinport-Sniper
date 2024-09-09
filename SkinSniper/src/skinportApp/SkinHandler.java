@@ -51,6 +51,8 @@ public class SkinHandler {
 			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints30Days).reversed());
 		}else if(sortByDays == 7) {
 			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints7Days).reversed());
+		}else if(sortByDays == -1){
+			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPointsAvg).reversed());
 		}else {
 			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints24Hours).reversed());
 		}

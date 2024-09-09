@@ -44,10 +44,10 @@ public class Controller implements Initializable {
 
 	@FXML
 	private TextField volumeField;
-	
+
 	@FXML
 	private RadioButton unrelRadButt;
-	
+
 	@FXML
 	private Button priceEnter;
 
@@ -98,9 +98,6 @@ public class Controller implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-
-		
 
 		SkinHandler skinHandler = new SkinHandler(APITest.callAPI("https://api.skinport.com/v1/sales/history"),
 				APITest.callAPI("https://api.skinport.com/v1/items"));
@@ -108,7 +105,7 @@ public class Controller implements Initializable {
 		for (CalculatedSkin skin : skinHandler.getFilteredSkins()) {
 			marketNamesList.add(skin.getMarket_hash_name());
 		}
-		
+
 		unrelRadButt.setSelected(true);
 		myListView.getItems().addAll(marketNamesList);
 
@@ -116,9 +113,20 @@ public class Controller implements Initializable {
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				
+				Double sortByMin = (minLabel.getText().isBlank()) ? 0 : Double.valueOf(minLabel.getText());
+				Double sortByMax = (maxLabel.getText().isBlank()) ? Double.MAX_VALUE
+						: Double.valueOf(maxLabel.getText());
+				int sortByVol = (volumeField.getText().isBlank()) ? 0 : Integer.valueOf(volumeField.getText());
+				int sortByDays;
+				if(updatedAtField.getText().equals("avg")) {
+					sortByDays = -1; //stands for average
+				}else {
+					sortByDays = (updatedAtField.getText().isBlank()) ? 24 : Integer.valueOf(updatedAtField.getText());
+				}
+				skinHandler.setSettings(sortByMin, sortByMax, sortByDays, sortByVol,
+						unrelRadButt.isSelected());
 
-				skinHandler.setSettings(Double.valueOf(minLabel.getText()), Double.valueOf(maxLabel.getText()),
-						Integer.valueOf(updatedAtField.getText()),Integer.valueOf(volumeField.getText()),unrelRadButt.isSelected());
 				skinHandler.filterList();
 				List<String> newMarketNamesList = new ArrayList<String>();
 				if (skinHandler.getFilteredSkins().size() != 0) {
@@ -159,8 +167,6 @@ public class Controller implements Initializable {
 		priceEnter.setOnAction(event);
 		skinPortLinkButton.setOnAction(goListingWebsite);
 
-
-
 		// For selecting an item. Get ItemColorCode and change the grids text.
 		myListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -178,13 +184,13 @@ public class Controller implements Initializable {
 					updateBackgroundColor(sevenDays, colorCode.charAt(1));
 					updateBackgroundColor(thirtyDays, colorCode.charAt(2));
 					updateBackgroundColor(ninetyDays, colorCode.charAt(3));
-					
+
 					if (skin.getPrice24Hours() != null) {
 						double skin24HourPrice = skin.getPrice24Hours();
 						twntyFrHourPrice.setText(Double.toString(skin24HourPrice));
-						twntyFrHourEarn.setText(Double.toString(skin24HourPrice - skin.getMin_price()));
+						twntyFrHourEarn.setText(Double.toString((skin24HourPrice * 0.88) - skin.getMin_price()));
 						twntyFrHourPercent.setText(
-								Double.toString((skin24HourPrice - skin.getMin_price()) / skin.getMin_price()));
+								Double.toString((skin24HourPrice * 0.88 - skin.getMin_price()) / skin.getMin_price()));
 					} else {
 						twntyFrHourPrice.setText("-");
 						twntyFrHourEarn.setText("-");
@@ -194,9 +200,9 @@ public class Controller implements Initializable {
 					if (skin.getPrice7Days() != null) {
 						double skin7DaysPrice = skin.getPrice7Days();
 						sevDaysPrice.setText(Double.toString(skin7DaysPrice));
-						sevDaysEarn.setText(Double.toString(skin7DaysPrice - skin.getMin_price()));
-						sevDaysPercent
-								.setText(Double.toString((skin7DaysPrice - skin.getMin_price()) / skin.getMin_price()));
+						sevDaysEarn.setText(Double.toString((skin7DaysPrice * 0.88) - skin.getMin_price()));
+						sevDaysPercent.setText(
+								Double.toString((skin7DaysPrice * 0.88 - skin.getMin_price()) / skin.getMin_price()));
 					} else {
 						sevDaysPrice.setText("-");
 						sevDaysEarn.setText("-");
@@ -206,9 +212,9 @@ public class Controller implements Initializable {
 					if (skin.getPrice30Days() != null) {
 						double skin30DaysPrice = skin.getPrice30Days();
 						thirtyDaysPrice.setText(Double.toString(skin30DaysPrice));
-						thirtyDaysEarn.setText(Double.toString(skin30DaysPrice - skin.getMin_price()));
+						thirtyDaysEarn.setText(Double.toString((skin30DaysPrice * 0.88) - skin.getMin_price()));
 						thirtyDaysPercent.setText(
-								Double.toString((skin30DaysPrice - skin.getMin_price()) / skin.getMin_price()));
+								Double.toString((skin30DaysPrice * 0.88 - skin.getMin_price()) / skin.getMin_price()));
 					} else {
 						thirtyDaysPrice.setText("-");
 						thirtyDaysEarn.setText("-");
@@ -218,9 +224,9 @@ public class Controller implements Initializable {
 					if (skin.getPrice90Days() != null) {
 						double skin90DaysPrice = skin.getPrice90Days();
 						ninetyDaysPrice.setText(Double.toString(skin90DaysPrice));
-						ninetyDaysEarn.setText(Double.toString(skin90DaysPrice - skin.getMin_price()));
+						ninetyDaysEarn.setText(Double.toString((skin90DaysPrice * 0.88) - skin.getMin_price()));
 						ninetyDaysPercent.setText(
-								Double.toString((skin90DaysPrice - skin.getMin_price()) / skin.getMin_price()));
+								Double.toString((skin90DaysPrice * 0.88 - skin.getMin_price()) / skin.getMin_price()));
 					} else {
 						ninetyDaysPrice.setText("-");
 						ninetyDaysEarn.setText("-");

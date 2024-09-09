@@ -38,7 +38,7 @@ public class CalculatedSkin {
 		
 		if (corresponding.getLast_24_hours().getMin() != null) {
 			points24Hours[0] = corresponding.getLast_24_hours().getMin();
-			points24Hours[1] = points24Hours[0] - min_price;
+			points24Hours[1] = points24Hours[0]*0.88 - min_price;
 			points24Hours[2] = points24Hours[1] / min_price;
 			
 		}
@@ -46,7 +46,7 @@ public class CalculatedSkin {
 
 		if (corresponding.getLast_7_days().getMin() != null) {
 			points7Days[0] = corresponding.getLast_7_days().getMin();
-			points7Days[1] = points7Days[0] - min_price;
+			points7Days[1] = (points7Days[0]*0.88) - min_price;
 			points7Days[2] = points7Days[1] / min_price;
 			
 		}
@@ -54,7 +54,7 @@ public class CalculatedSkin {
 
 		if (corresponding.getLast_30_days().getMin() != null) {
 			points30Days[0] = corresponding.getLast_30_days().getMin();
-			points30Days[1] = points30Days[0] - min_price;
+			points30Days[1] = (points30Days[0]*0.88) - min_price;
 			points30Days[2] = points30Days[1] / min_price;
 			
 		}
@@ -62,7 +62,7 @@ public class CalculatedSkin {
 
 		if (corresponding.getLast_90_days().getMin() != null) {
 			points90Days[0] = corresponding.getLast_90_days().getMin();
-			points90Days[1] = points90Days[0] - min_price;
+			points90Days[1] = (points90Days[0]*0.88) - min_price;
 			points90Days[2] = points90Days[1] / min_price;
 			
 		}
@@ -262,6 +262,34 @@ public class CalculatedSkin {
 	public Double getPoints90Days() {
 		return (points90Days[2] != null)? points90Days[2] : 0.0;
 	}
+	
+	public Double getPointsAvg() {
+		Double sum = 0.0;
+		int count = 0;
+		if(getPoints24Hours() != 0) {
+			sum += getPoints24Hours();
+			count++;
+		}
+		if(getPoints7Days() != 0) {
+			sum += getPoints7Days();
+			count++;
+		}
+		if(getPoints30Days() != 0) {
+			sum += getPoints30Days();
+			count++;
+		}
+		if(getPoints90Days() != 0) {
+			sum += getPoints90Days();
+			count++;
+		}
+		
+		if(count == 0) {
+			return 0.0;
+		}
+		return sum / count;
+		
+	}
+	
 	
 	public Double getPrice24Hours() {
 		return points24Hours[0];
