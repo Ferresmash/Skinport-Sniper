@@ -31,56 +31,112 @@ public class APITest {
 //		sH.addCurrentSkin(
 //				"[{\"market_hash_name\":\"AK-47 | Baroque Purple (Field-Tested)\",\"currency\":\"EUR\",\"suggested_price\":4.44,\"item_page\":\"https://skinport.com/item/ak-47-baroque-purple-field-tested\",\"market_page\":\"https://skinport.com/market?item=Baroque%20Purple&cat=Rifle&type=AK-47\",\"min_price\":3.8,\"max_price\":29.99,\"mean_price\":6.82,\"median_price\":5.62,\"quantity\":126,\"created_at\":1574875873,\"updated_at\":1701618015},]");
 	}
-
+	
 	public static String callAPI(String endpoint) {
-		try {
-			// Your API key and secret
-			String apiKey = "174e9aceda5c4415b6df58149f81b137";
-			String apiSecret = "MNN2EUmz4tmgO0G+jzvc6EIR1mBP7fY1lWeyve2wYjRw9t+oPlP5KOY5z37mtoynEaKLwvHGrwndfVStRZ1dig==";
+        try {
+            // Your API key and secret
+            String apiKey = "174e9aceda5c4415b6df58149f81b137";
+            String apiSecret = "MNN2EUmz4tmgO0G+jzvc6EIR1mBP7fY1lWeyve2wYjRw9t+oPlP5KOY5z37mtoynEaKLwvHGrwndfVStRZ1dig==";
 
-			// Combine API key and secret
-			String credentials = apiKey + ":" + apiSecret;
+            // Combine API key and secret
+            String credentials = apiKey + ":" + apiSecret;
 
-			// Encode credentials to Base64
-			String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
+            // Encode credentials to Base64
+            String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
-			// Create URL object
-			URL url = new URL(endpoint);
+            // Append the currency to the endpoint
+            String currency = "SEK";
+            String fullEndpoint = endpoint + "?currency=" + currency;  // Adding currency=SEK as a parameter
 
-			// Open connection
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            // Create URL object
+            URL url = new URL(fullEndpoint);
 
-			// Set request method
-			connection.setRequestMethod("GET");
+            // Open connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-			// Set Authorization header
-			connection.setRequestProperty("Authorization", "Basic " + encodedCredentials);
+            // Set request method
+            connection.setRequestMethod("GET");
 
-			// Get response code
-			int responseCode = connection.getResponseCode();
-			System.out.println("Response Code: " + responseCode);
+            // Set Authorization header
+            connection.setRequestProperty("Authorization", "Basic " + encodedCredentials);
 
-			// Read response
-			BufferedReader reader;
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			} else {
-				reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-			}
-			String line;
-			StringBuffer response = new StringBuffer();
-			while ((line = reader.readLine()) != null) {
-				response.append(line);
-			}
-			reader.close();
+            // Get response code
+            int responseCode = connection.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
 
-//          Print response
-			System.out.println("Response: " + response.toString());
-			return response.toString();
+            // Read response
+            BufferedReader reader;
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            } else {
+                reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            }
+            String line;
+            StringBuffer response = new StringBuffer();
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "ERROR ERROR ERROR ERROR (DID NOT WORK)";
-	}
+            // Print response
+            System.out.println("Response: " + response.toString());
+            return response.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "ERROR ERROR ERROR ERROR (DID NOT WORK)";
+    }
+
+//	public static String callAPI(String endpoint) {
+//		try {
+//			// Your API key and secret
+//			String apiKey = "174e9aceda5c4415b6df58149f81b137";
+//			String apiSecret = "MNN2EUmz4tmgO0G+jzvc6EIR1mBP7fY1lWeyve2wYjRw9t+oPlP5KOY5z37mtoynEaKLwvHGrwndfVStRZ1dig==";
+//
+//			// Combine API key and secret
+//			String credentials = apiKey + ":" + apiSecret;
+//
+//			// Encode credentials to Base64
+//			String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
+//
+//			// Create URL object
+//			URL url = new URL(endpoint);
+//
+//			// Open connection
+//			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//
+//			// Set request method
+//			connection.setRequestMethod("GET");
+//
+//			// Set Authorization header
+//			connection.setRequestProperty("Authorization", "Basic " + encodedCredentials);
+//
+//			// Get response code
+//			int responseCode = connection.getResponseCode();
+//			System.out.println("Response Code: " + responseCode);
+//
+//			// Read response
+//			BufferedReader reader;
+//			if (responseCode == HttpURLConnection.HTTP_OK) {
+//				reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//			} else {
+//				reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+//			}
+//			String line;
+//			StringBuffer response = new StringBuffer();
+//			while ((line = reader.readLine()) != null) {
+//				response.append(line);
+//			}
+//			reader.close();
+//
+////          Print response
+//			System.out.println("Response: " + response.toString());
+//			return response.toString();
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return "ERROR ERROR ERROR ERROR (DID NOT WORK)";
+//	}
 }

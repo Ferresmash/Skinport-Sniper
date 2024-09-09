@@ -76,8 +76,11 @@ public class SkinHandler {
 		if(!hideUnreliableSkins) {
 			return false;
 		}
-		if(skin.getMarket_hash_name().contains("Case Hardened")||skin.getMarket_hash_name().contains("Doppler")||skin.getMarket_hash_name().contains("Music Kit")) {
-			return true;
+		String[] unreliableSkinNames = {"Case Hardened", "Doppler", "Music Kit", "Fade"};
+		for (String unreliableSkinName : unreliableSkinNames) {
+			if(skin.getMarket_hash_name().contains(unreliableSkinName)) {
+				return true;
+			}
 		}
 		return false;
 	}
