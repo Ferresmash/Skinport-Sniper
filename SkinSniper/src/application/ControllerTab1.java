@@ -3,6 +3,7 @@ package application;
 
 import java.awt.Desktop;
 
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,13 +20,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import skinportApp.APITest;
+import skinportApp.APIHandler;
 import skinportApp.CalculatedSkin;
 import skinportApp.SkinHandler;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
-public class Controller implements Initializable {
+public class ControllerTab1 implements Initializable {
 
 	@FXML
 	private ListView<String> myListView;
@@ -98,9 +99,10 @@ public class Controller implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		SkinHandler skinHandler = new SkinHandler(APITest.callAPI("https://api.skinport.com/v1/sales/history"),
-				APITest.callAPI("https://api.skinport.com/v1/items"));
+		
+//		SkinHandler skinHandler = new SkinHandler();
+		SkinHandler skinHandler = new SkinHandler(APIHandler.callAPI("https://api.skinport.com/v1/sales/history"),
+				APIHandler.callAPI("https://api.skinport.com/v1/items"));
 		List<String> marketNamesList = new ArrayList<String>();
 		for (CalculatedSkin skin : skinHandler.getFilteredSkins()) {
 			marketNamesList.add(skin.getMarket_hash_name());
@@ -146,8 +148,7 @@ public class Controller implements Initializable {
 				int index = myListView.getSelectionModel().getSelectedIndex();
 				if (index != -1) {
 					currentHTML = skinHandler.getFilteredSkins().get(index).getItem_page();
-					skinHandler.getFilteredSkins().get(index).getItem_page().substring(26);
-
+//					skinHandler.getFilteredSkins().get(index).getItem_page().substring(26);
 				}
 
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -250,7 +251,6 @@ public class Controller implements Initializable {
 				button.setStyle("-fx-background-color: " + color + ";");
 			}
 		});
-
 		currentHTML = "";
 	}
 

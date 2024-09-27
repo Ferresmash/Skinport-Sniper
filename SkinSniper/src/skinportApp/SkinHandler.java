@@ -22,7 +22,10 @@ public class SkinHandler {
 	private int sortByDays = 7;
 	private int volume = 5;
 	private boolean hideUnreliableSkins = true;
-	
+
+	public SkinHandler() {
+
+	}
 
 	public SkinHandler(String skinHistory, String currentSkin) {
 
@@ -43,18 +46,21 @@ public class SkinHandler {
 		}
 		filterList();
 	}
-	
+
 	public void sortList(int sortByDays) {
-		if(sortByDays == 90) {
-			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints90Days).reversed());
-		}else if(sortByDays == 30) {
-			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints30Days).reversed());
-		}else if(sortByDays == 7) {
+		if (sortByDays == 90) {
+			Collections.sort(this.filteredSkins,
+					Comparator.comparingDouble(CalculatedSkin::getPoints90Days).reversed());
+		} else if (sortByDays == 30) {
+			Collections.sort(this.filteredSkins,
+					Comparator.comparingDouble(CalculatedSkin::getPoints30Days).reversed());
+		} else if (sortByDays == 7) {
 			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints7Days).reversed());
-		}else if(sortByDays == -1){
+		} else if (sortByDays == -1) {
 			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPointsAvg).reversed());
-		}else {
-			Collections.sort(this.filteredSkins, Comparator.comparingDouble(CalculatedSkin::getPoints24Hours).reversed());
+		} else {
+			Collections.sort(this.filteredSkins,
+					Comparator.comparingDouble(CalculatedSkin::getPoints24Hours).reversed());
 		}
 	}
 
@@ -63,7 +69,7 @@ public class SkinHandler {
 		for (CalculatedSkin calculatedSkin : listedSkins) {
 			if (calculatedSkin.getMin_price() != null) {
 				if (calculatedSkin.getMin_price() >= sortPriceMin && calculatedSkin.getMin_price() <= sortPriceMax) {
-					if(!isUnreliable(calculatedSkin) && volume <= calculatedSkin.getPoints(sortByDays)[3]) {
+					if (!isUnreliable(calculatedSkin) && volume <= calculatedSkin.getPoints(sortByDays)[3]) {
 						filteredSkins.add(calculatedSkin);
 					}
 				}
@@ -71,24 +77,43 @@ public class SkinHandler {
 		}
 		sortList(sortByDays);
 	}
-	
+
 	public boolean isUnreliable(CalculatedSkin skin) {
-		if(!hideUnreliableSkins) {
+		if (!hideUnreliableSkins) {
 			return false;
 		}
-		String[] unreliableSkinNames = {"Case Hardened", "Doppler", "Music Kit", "Fade"};
+		if(haveOutlierInSpecifiedTime(skin, sortByDays)) {
+			return true;
+		}
+		
+		String[] unreliableSkinNames = { "Case Hardened", "Doppler", "Music Kit", "Fade", "Redline", "Laminate" };
 		for (String unreliableSkinName : unreliableSkinNames) {
-			if(skin.getMarket_hash_name().contains(unreliableSkinName)) {
+			if (skin.getMarket_hash_name().contains(unreliableSkinName)) {
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	public boolean haveOutlierInSpecifiedTime(CalculatedSkin skin, int sortByDays) {
+		if (sortByDays == 90) {
+			return skin.isOutlier90Days() || skin.isOutlier7Days() || skin.isOutlier24Hours();
+		} else if (sortByDays == 30) {
+			return skin.isOutlier30Days() || skin.isOutlier7Days() || skin.isOutlier24Hours();
+		} else if (sortByDays == 7) {
+			return skin.isOutlier7Days() || skin.isOutlier24Hours();
+		} else if (sortByDays == -1) {
+			return skin.isOutlier90Days();
+		} else {
+			return skin.isOutlier24Hours();
+		}
+	}
+
 
 	public List<CalculatedSkin> getListedSkins() {
 		return this.listedSkins;
 	}
-	
+
 	public List<CalculatedSkin> getFilteredSkins() {
 		return this.filteredSkins;
 	}
@@ -96,8 +121,7 @@ public class SkinHandler {
 	public List<Skin> getSkinList() {
 		return skinList;
 	}
-	
-	
+
 	public void setSettings(Double min, Double max, int days, int volume, boolean hideUnreliableSkins) {
 		sortPriceMin = min;
 		sortPriceMax = max;
@@ -105,7 +129,5 @@ public class SkinHandler {
 		this.volume = volume;
 		this.hideUnreliableSkins = hideUnreliableSkins;
 	}
-	
-	
-	
+
 }

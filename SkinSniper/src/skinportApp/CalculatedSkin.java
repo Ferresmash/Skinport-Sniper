@@ -1,5 +1,7 @@
 package skinportApp;
 
+import java.util.Arrays;
+
 public class CalculatedSkin {
 
 	private String market_hash_name;
@@ -24,6 +26,14 @@ public class CalculatedSkin {
 	private Double[] points7Days = new Double[4];
 	private Double[] points30Days = new Double[4];
 	private Double[] points90Days = new Double[4];
+	
+	
+	// true, because it should be initiliazed.
+	private boolean isOutlier24Hours = true;
+	private boolean isOutlier7Days = true;
+	private boolean isOutlier30Days = true;
+	private boolean isOutlier90Days = true;
+	
 
 	/**
 	 * Sets points for the skin
@@ -36,37 +46,84 @@ public class CalculatedSkin {
 			return;
 		}
 		
+//		if (corresponding.getLast_24_hours().getMin() != null) {
+//			points24Hours[0] = corresponding.getLast_24_hours().getMin();
+//			points24Hours[1] = points24Hours[0]*0.88 - min_price;
+//			points24Hours[2] = points24Hours[1] / min_price;
+//			
+//		}
+//		points24Hours[3] = (double) corresponding.getLast_24_hours().getVolume();
+//
+//		if (corresponding.getLast_7_days().getMin() != null) {
+//			points7Days[0] = corresponding.getLast_7_days().getMin();
+//			points7Days[1] = (points7Days[0]*0.88) - min_price;
+//			points7Days[2] = points7Days[1] / min_price;
+//			
+//		}
+//		points7Days[3] = (double) corresponding.getLast_7_days().getVolume();
+//
+//		if (corresponding.getLast_30_days().getMin() != null) {
+//			points30Days[0] = corresponding.getLast_30_days().getMin();
+//			points30Days[1] = (points30Days[0]*0.88) - min_price;
+//			points30Days[2] = points30Days[1] / min_price;
+//			
+//		}
+//		points30Days[3] = (double) corresponding.getLast_30_days().getVolume();
+//
+//		if (corresponding.getLast_90_days().getMin() != null) {
+//			points90Days[0] = corresponding.getLast_90_days().getMin();
+//			points90Days[1] = (points90Days[0]*0.88) - min_price;
+//			points90Days[2] = points90Days[1] / min_price;
+//			
+//		}
+//		points90Days[3] = (double) corresponding.getLast_90_days().getVolume();
 		if (corresponding.getLast_24_hours().getMin() != null) {
-			points24Hours[0] = corresponding.getLast_24_hours().getMin();
+			points24Hours[0] = calculateBlendedPrice(corresponding.getLast_24_hours());
 			points24Hours[1] = points24Hours[0]*0.88 - min_price;
 			points24Hours[2] = points24Hours[1] / min_price;
-			
+			isOutlier24Hours = isOutlier(corresponding.getLast_24_hours());
 		}
 		points24Hours[3] = (double) corresponding.getLast_24_hours().getVolume();
 
 		if (corresponding.getLast_7_days().getMin() != null) {
-			points7Days[0] = corresponding.getLast_7_days().getMin();
+			points7Days[0] = calculateBlendedPrice(corresponding.getLast_7_days());
 			points7Days[1] = (points7Days[0]*0.88) - min_price;
 			points7Days[2] = points7Days[1] / min_price;
-			
+			isOutlier7Days = isOutlier(corresponding.getLast_7_days());
 		}
 		points7Days[3] = (double) corresponding.getLast_7_days().getVolume();
 
 		if (corresponding.getLast_30_days().getMin() != null) {
-			points30Days[0] = corresponding.getLast_30_days().getMin();
+			points30Days[0] = calculateBlendedPrice(corresponding.getLast_30_days());
 			points30Days[1] = (points30Days[0]*0.88) - min_price;
 			points30Days[2] = points30Days[1] / min_price;
-			
+			isOutlier30Days = isOutlier(corresponding.getLast_30_days());
 		}
 		points30Days[3] = (double) corresponding.getLast_30_days().getVolume();
 
 		if (corresponding.getLast_90_days().getMin() != null) {
-			points90Days[0] = corresponding.getLast_90_days().getMin();
+			points90Days[0] = calculateBlendedPrice(corresponding.getLast_90_days());
 			points90Days[1] = (points90Days[0]*0.88) - min_price;
 			points90Days[2] = points90Days[1] / min_price;
-			
+			isOutlier90Days = isOutlier(corresponding.getLast_90_days());
 		}
 		points90Days[3] = (double) corresponding.getLast_90_days().getVolume();
+	}
+	
+	//checks if any of the max and min pricehistory have outliers
+	public boolean isOutlier(PriceData priceData) {
+		Double max = priceData.getMax();
+		Double min = priceData.getMin();
+		double mean = priceData.getAvg();
+		double stdDev = calculatePriceVolatility(priceData); // Standard deviation
+		return (max > mean + 2 * stdDev || max < mean - 2 * stdDev) || (min > mean + 2 * stdDev || min < mean - 2 * stdDev);
+	}
+
+	public Double calculatePriceVolatility(PriceData priceData) {
+		Double[] prices = { priceData.getMin(), priceData.getMax(), priceData.getAvg(), priceData.getMedian() };
+		Double mean = Arrays.stream(prices).mapToDouble(Double::doubleValue).average().orElse(0.0);
+		Double variance = Arrays.stream(prices).mapToDouble(price -> Math.pow(price - mean, 2)).sum() / prices.length;
+		return Math.sqrt(variance); // Standard deviation
 	}
 
 
@@ -128,6 +185,19 @@ public class CalculatedSkin {
 			}
 		}
 	}
+	
+	//Try new evaluation method with average and min in consideration
+	public Double calculateBlendedPrice(PriceData priceData) {
+	    double medianWeight = 0.5;
+	    double avgWeight = 0.4;
+	    double minWeight = 0.1;
+
+	    return (priceData.getMedian() * medianWeight) + 
+	           (priceData.getAvg() * avgWeight) + 
+	           (priceData.getMin() * minWeight);
+	}
+	
+
 
 	public String getMarket_hash_name() {
 		return market_hash_name;
@@ -302,6 +372,22 @@ public class CalculatedSkin {
 	}
 	public Double getPrice90Days() {
 		return points90Days[0];
+	}
+
+	public boolean isOutlier24Hours() {
+		return isOutlier24Hours;
+	}
+
+	public boolean isOutlier7Days() {
+		return isOutlier7Days;
+	}
+
+	public boolean isOutlier30Days() {
+		return isOutlier30Days;
+	}
+
+	public boolean isOutlier90Days() {
+		return isOutlier90Days;
 	}
 
 }

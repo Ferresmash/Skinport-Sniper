@@ -1,0 +1,11 @@
+[
+    {
+      "name": "PriceFilter",
+      "max": 500.0,
+      "min": 100.0,
+      "checkLast": 24,
+      "volume": 100,
+      "hideUnrelSkins": true,
+      "saveYellow": false
+    }
+  ]

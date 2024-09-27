@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="628.0" prefWidth="1194.0" style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ControllerTab2">
+	<children>
+		<ListView fx:id="savedSearches" layoutX="14.0" layoutY="287.0" prefHeight="151.0" prefWidth="264.0" />
+		<Label layoutX="14.0" layoutY="270.0" text="Saved Searches" textFill="WHITE" />
+      <Button fx:id="createNewButton" layoutX="14.0" layoutY="446.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="264.0" text="Create New Search" />
+      <Button fx:id="deleteSelectedButton" layoutX="14.0" layoutY="491.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="264.0" text="Delete Selected Search" />
+      <Button fx:id="editSelectedButton" layoutX="14.0" layoutY="536.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="264.0" text="Edit Selected Search" />
+      <RadioButton fx:id="playSoundRadioButton" layoutX="21.0" layoutY="122.0" mnemonicParsing="false" text="Play Sound When New Skin Found" textFill="WHITE" />
+      <RadioButton fx:id="notifyDiscordRadioButton" layoutX="21.0" layoutY="148.0" mnemonicParsing="false" text="Notify discord bot" textFill="WHITE" />
+      <Button fx:id="startBotButton" layoutX="14.0" layoutY="175.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="264.0" text="Start Bot" />
+      <Button fx:id="resetBotButton" layoutX="14.0" layoutY="206.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="264.0" text="Reset Bot" />
+      <Button fx:id="pauseBotButton" layoutX="14.0" layoutY="237.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="264.0" text="Pause Bot" />
+      <TextField fx:id="updateEveryMinField" layoutX="14.0" layoutY="88.0" prefHeight="25.0" prefWidth="264.0" />
+      <Label layoutX="14.0" layoutY="74.0" prefHeight="17.0" prefWidth="264.0" text="Update Every (X min)" textFill="WHITE" />
+      <ListView fx:id="savedListView" layoutX="299.0" layoutY="52.0" prefHeight="521.0" prefWidth="344.0" />
+      <GridPane layoutX="660.0" layoutY="110.0" prefHeight="418.0" prefWidth="512.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints fillHeight="false" maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label fx:id="sevDaysPrice" alignment="CENTER" prefHeight="107.0" prefWidth="128.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="sevDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label fx:id="sevDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label fx:id="ninetyDaysPrice" alignment="CENTER" prefHeight="83.0" prefWidth="142.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="ninetyDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="ninetyDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Label fx:id="twntyFrHourPrice" alignment="CENTER" prefHeight="84.0" prefWidth="200.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" />
+            <Label fx:id="twntyFrHourEarn" alignment="CENTER" prefHeight="84.0" prefWidth="146.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" />
+            <Label fx:id="twntyFrHourPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" />
+            <Label fx:id="thirtyDaysPrice" alignment="CENTER" prefHeight="84.0" prefWidth="203.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="thirtyDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label fx:id="thirtyDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label fx:id="currPrice" alignment="CENTER" prefHeight="83.0" prefWidth="159.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <Button fx:id="twentyFour" alignment="CENTER" mnemonicParsing="false" prefHeight="124.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 0;" text="24h" textAlignment="CENTER" />
+            <Button fx:id="thirtyDays" alignment="CENTER" mnemonicParsing="false" prefHeight="116.0" prefWidth="128.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 0;" text="30 days" textAlignment="CENTER" GridPane.rowIndex="2" />
+            <Button fx:id="current" alignment="CENTER" mnemonicParsing="false" prefHeight="95.0" prefWidth="128.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 0;" text="Current" textAlignment="CENTER" GridPane.rowIndex="4" />
+            <Button fx:id="ninetyDays" alignment="CENTER" mnemonicParsing="false" prefHeight="138.0" prefWidth="128.0" style="-fx-background-color: cccccc; -fx-background-radius: 0;" text="90 days" textAlignment="CENTER" GridPane.rowIndex="3" />
+            <Button fx:id="sevenDays" alignment="CENTER" mnemonicParsing="false" prefHeight="188.0" prefWidth="128.0" style="-fx-background-color: cccccc; -fx-background-radius: 0;" text="7 days" textAlignment="CENTER" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <Button fx:id="skinPortLinkButton" layoutX="805.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="206.0" text="Go to listing on skinport" />
+      <Label fx:id="topLabel" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="43.0" prefWidth="1194.0" text="Select a skin" textFill="#a4a4a4">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Label>
+      <AnchorPane fx:id="darkendBackground" layoutX="-5.0" layoutY="-1.0" prefHeight="635.0" prefWidth="1202.0" style="-fx-opacity: .6; -fx-background-color: black;" visible="false" />
+      <AnchorPane fx:id="createNewPanel" layoutX="238.0" layoutY="97.0" prefHeight="389.0" prefWidth="702.0" style="-fx-background-color: #383838;" visible="false">
+         <children>
+            <TextField fx:id="saveSearchName" layoutX="14.0" layoutY="64.0" prefHeight="25.0" prefWidth="264.0" />
+            <Label layoutX="14.0" layoutY="47.0" text="Name" textFill="WHITE" />
+            <TextField fx:id="saveSearchMax" layoutX="14.0" layoutY="109.0" prefHeight="25.0" prefWidth="264.0" />
+            <TextField fx:id="saveSearchMin" layoutX="14.0" layoutY="156.0" prefHeight="25.0" prefWidth="264.0" />
+            <TextField fx:id="saveSearchCheckLast" layoutX="14.0" layoutY="200.0" prefHeight="25.0" prefWidth="264.0" />
+            <TextField fx:id="saveSearchVolume" layoutX="14.0" layoutY="248.0" prefHeight="25.0" prefWidth="264.0" />
+            <Label layoutX="14.0" layoutY="89.0" text="Max" textFill="WHITE" />
+            <Label layoutX="14.0" layoutY="139.0" text="Min" textFill="WHITE" />
+            <Label layoutX="14.0" layoutY="183.0" prefHeight="17.0" prefWidth="226.0" text="CheckLast (24,7,30,90)" textFill="WHITE" />
+            <Label layoutX="14.0" layoutY="231.0" prefHeight="17.0" prefWidth="226.0" text="Volume" textFill="WHITE" />
+            <RadioButton fx:id="hideUnreliableSkins" layoutX="14.0" layoutY="284.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="264.0" text="Hide Unreliable Skins" textFill="WHITE" />
+            <RadioButton fx:id="saveAlsoYellow" layoutX="14.0" layoutY="310.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="264.0" text="Save Also Yellow" textFill="WHITE" />
+            <Button fx:id="saveNewSearchButton" layoutX="291.0" layoutY="332.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="383.0" text="Save Search" />
+         </children>
+      </AnchorPane>
+	</children>
+</AnchorPane>

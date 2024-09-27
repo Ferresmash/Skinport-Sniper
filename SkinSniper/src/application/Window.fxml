@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -12,68 +14,24 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="628.0" prefWidth="1194.0" style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="628.0" prefWidth="1194.0" style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
    <padding>
       <Insets right="10.0" />
    </padding>
    <children>
-      <Label fx:id="myLabel" alignment="CENTER" layoutX="262.0" layoutY="14.0" prefHeight="43.0" prefWidth="670.0" text="Select a skin" textFill="#a4a4a4">
-         <font>
-            <Font size="29.0" />
-         </font>
-      </Label>
-      <ListView fx:id="myListView" layoutX="169.0" layoutY="67.0" prefHeight="550.0" prefWidth="450.0" style="-fx-background-color: #303030;" />
-      <Button fx:id="priceEnter" layoutX="20.0" layoutY="416.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="140.0" text="update evaluation" />
-      <Label layoutX="20.0" layoutY="183.0" prefHeight="17.0" prefWidth="140.0" text="Filter Settings" textFill="WHITE" underline="true">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font></Label>
-      <TextField fx:id="maxLabel" layoutX="20.0" layoutY="227.0" prefHeight="25.0" prefWidth="140.0" text="300" />
-      <TextField fx:id="minLabel" layoutX="20.0" layoutY="269.0" prefHeight="25.0" prefWidth="140.0" text="50" />
-      <TextField fx:id="updatedAtField" layoutX="20.0" layoutY="311.0" prefHeight="25.0" prefWidth="140.0" text="7" />
-      <Label layoutX="20.0" layoutY="210.0" prefHeight="17.0" prefWidth="149.0" text="Max" textFill="WHITE" />
-      <Label layoutX="20.0" layoutY="252.0" prefHeight="17.0" prefWidth="149.0" text="Min" textFill="WHITE" />
-      <Label layoutX="20.0" layoutY="294.0" prefHeight="17.0" prefWidth="149.0" text="checkLast(24hr,7d,30d,90d)" textFill="WHITE" />
-      <GridPane layoutX="650.0" layoutY="88.0" prefHeight="418.0" prefWidth="512.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="ALWAYS" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
-          <ColumnConstraints hgrow="ALWAYS" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="349.0" minWidth="10.0" prefWidth="241.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints fillHeight="false" maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label fx:id="sevDaysPrice" alignment="CENTER" prefHeight="107.0" prefWidth="128.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="sevDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label fx:id="sevDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Label fx:id="ninetyDaysPrice" alignment="CENTER" prefHeight="83.0" prefWidth="142.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="ninetyDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label fx:id="ninetyDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: cccccc;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Label fx:id="twntyFrHourPrice" alignment="CENTER" prefHeight="84.0" prefWidth="200.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" />
-            <Label fx:id="twntyFrHourEarn" alignment="CENTER" prefHeight="84.0" prefWidth="146.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" />
-            <Label fx:id="twntyFrHourPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" />
-            <Label fx:id="thirtyDaysPrice" alignment="CENTER" prefHeight="84.0" prefWidth="203.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="thirtyDaysEarn" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label fx:id="thirtyDaysPercent" alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Label fx:id="currPrice" alignment="CENTER" prefHeight="83.0" prefWidth="159.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Label alignment="CENTER" prefHeight="84.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2;" text="-" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-            <Button fx:id="twentyFour" alignment="CENTER" mnemonicParsing="false" prefHeight="124.0" prefWidth="129.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 0;" text="24h" textAlignment="CENTER" />
-            <Button fx:id="thirtyDays" alignment="CENTER" mnemonicParsing="false" prefHeight="116.0" prefWidth="128.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 0;" text="30 days" textAlignment="CENTER" GridPane.rowIndex="2" />
-            <Button fx:id="current" alignment="CENTER" mnemonicParsing="false" prefHeight="95.0" prefWidth="128.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 0;" text="Current" textAlignment="CENTER" GridPane.rowIndex="4" />
-            <Button fx:id="ninetyDays" alignment="CENTER" mnemonicParsing="false" prefHeight="138.0" prefWidth="128.0" style="-fx-background-color: cccccc; -fx-background-radius: 0;" text="90 days" textAlignment="CENTER" GridPane.rowIndex="3" />
-            <Button fx:id="sevenDays" alignment="CENTER" mnemonicParsing="false" prefHeight="188.0" prefWidth="128.0" style="-fx-background-color: cccccc; -fx-background-radius: 0;" text="7 days" textAlignment="CENTER" GridPane.rowIndex="1" />
-         </children>
-      </GridPane>
-      <Button fx:id="skinPortLinkButton" layoutX="819.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="206.0" text="Go to listing on skinport" />
-      <Label layoutX="20.0" layoutY="334.0" prefHeight="17.0" prefWidth="149.0" text="Volume (minimum)" textFill="WHITE" />
-      <TextField fx:id="volumeField" layoutX="20.0" layoutY="351.0" prefHeight="25.0" prefWidth="140.0" text="5" />
-      <RadioButton fx:id="unrelRadButt" layoutX="19.0" layoutY="384.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="140.0" selected="true" text="Hide Unreliable Skins" textFill="WHITE" />
+      <TabPane prefHeight="628.0" prefWidth="1194.0" style="-fx-background-color: #FFC0CB;" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Skin Finder">
+            <content>
+              <AnchorPane fx:id="tab1AnchorPane"/>
+            </content>
+          </Tab>
+          <Tab text="The bot">
+            <content>
+              <AnchorPane fx:id="tab2AnchorPane"/>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </AnchorPane>
